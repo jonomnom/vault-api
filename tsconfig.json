@@ -1,0 +1,44 @@
+{
+    "compilerOptions": {
+        "outDir": "./build",
+        "module": "commonjs",
+        "target": "es2017",
+        "moduleResolution": "node",
+        "removeComments": true,
+        "sourceMap": true,
+
+        /* Decorators needed for TypeORM */
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+
+        /* All strict type checking properties, if all are true, same as "strict": true */
+        "noImplicitAny": true,
+        "noImplicitThis": true,
+        "alwaysStrict": true,
+        "strictBindCallApply": true,
+        "strictFunctionTypes": true,
+        "strictNullChecks": true,
+        "strictPropertyInitialization": true,
+        "skipLibCheck": true,
+
+        /* The linter picks this up, no need to stop compilation. Otherwise they get very annoying during development */ 
+        // "noUnusedLocals": true,
+        // "noUnusedParameters": true,
+
+
+        // NOTE: only setting this to true becasue of a bug in the Slack module
+        // The module trys to import EventEmitter assuming a default export. This config is needed to prevent compilation error
+        //   >>> node_modules/@slack/web-api/dist/WebClient.d.ts(5,8): error TS1192: Module '"/src/node_modules/eventemitter3/index"' has no default export.
+        // Follow the bug status here https://github.com/slackapi/node-slack-sdk/issues/769
+        // Remove this hack when it is fixed
+        "allowSyntheticDefaultImports": true
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "**/*.test.ts",
+        "**/*.spec.ts"
+    ]
+}

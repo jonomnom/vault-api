@@ -1,0 +1,11 @@
+{
+  "extends": "tslint-config-standard",
+  "rules": {
+    "ter-indent": [ true, 4, { "SwitchCase": true } ],
+    "await-promise": [ true, "Bluebird" ], 
+    "no-unused-variable": false,
+    "strict-type-predicates": false,
+    "no-use-before-declare": false,
+    "trailing-comma": false
+  }
+}
