@@ -1,5 +1,10 @@
 import * as mongoose from 'mongoose'
 
+const LoggedEntry = new mongoose.Schema({
+    time: Date,
+    amount: String
+})
+
 const VaultSchema = new mongoose.Schema({
     vaultId: String,
     addr: String,
@@ -12,6 +17,7 @@ const VaultSchema = new mongoose.Schema({
     tvlUsd: Number,
     token: String,
     symbol: String,
+    data: [LoggedEntry]
 }, {
     timestamps: true
 })

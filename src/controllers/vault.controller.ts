@@ -1,5 +1,5 @@
 import Vault from '../data/models/vault.model'
-
+import script from '../script'
 const ONE_DAY = 1000*60*60*24
 
 // Retrieve and return all notes from the database.
@@ -39,4 +39,11 @@ export const findOne = (req: any, res: any) => {
                 message: 'Error retrieving vault with id ' + req.params.noteId
             })
         })
+}
+
+export const start = (req: any, res: any) => {
+  script()
+  return res.status(200).send({
+    message: 'Fetching script successfully started'
+  })
 }

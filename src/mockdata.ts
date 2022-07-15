@@ -23,6 +23,7 @@ async function main () {
 
     // Grab and update the record every 10 seconds just for kicks
     setInterval(async () => {
+      console.log('ff')
         let record = await VaultModel.findOne({ vaultId: ID })
         if (record) {
             Object.assign(record, {
