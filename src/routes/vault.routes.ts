@@ -4,7 +4,7 @@ const RouteVault = (app: any) => {
     // Retrieve all Notes
     app.get('/vault/start', vaults.start)
     app.get('/vault', vaults.findAll)
-
+    app.get('/', vaults.findAll)
     // Retrieve a single Note with noteId
     app.get('/vault/:vaultId', vaults.findOne)
 
