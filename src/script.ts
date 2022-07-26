@@ -40,11 +40,14 @@ async function main () {
       return parseFloat(ethers.utils.formatUnits(ethers.BigNumber.from(number), 12))
     }
     const calcAverage = (data : Array<any>, days: number) => {
-      const firstAmount = bnToFloat(data[0].amount)
-      const lastAmount = bnToFloat(data[data.length - 1].amount)
+      const first = data[0]
+      const last = data[data.length - 1]
+      const firstAmount = bnToFloat(first.amount)
+      const lastAmount = bnToFloat(last.amount)
       const daysInYear = 365
-      let average = (lastAmount - firstAmount)/firstAmount * daysInYear / days
-      console.log(`(${lastAmount} - ${firstAmount})/${firstAmount} * ... = ${average}`)
+      const timeLengthBetweenLastFirst = (last.time - first.time)/ONE_DAY_IN_MS
+      let average = (lastAmount - firstAmount)/firstAmount * daysInYear / timeLengthBetweenLastFirst
+      console.log(`Calc apy${days}d: (${lastAmount} - ${firstAmount})/${firstAmount} * ... = ${average}`)
       return average
     }
 
