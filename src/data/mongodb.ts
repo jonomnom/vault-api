@@ -15,13 +15,13 @@ export class MongooseDB extends EventEmitter {
 
     private async connect () {
         return new Promise<void>((resolve, reject) => {
-            mongoose.connect(`mongodb://localhost/robo`, {
+            mongoose.connect(process.env.MONGO_HOST || `mongodb://localhost/robo`, {
                 // useNewUrlParser: true
                 // useUnifiedTopology: true,
                 // useFindAndModify: false,
                 // useCreateIndex: true,
-                // user: process.env.MONGO_USER,
-                // pass: process.env.MONGO_PASS
+                user: process.env.MONGO_USER || undefined,
+                pass: process.env.MONGO_PASS || undefined
             }).then((db) => {
                 this.emit('connected')
                 console.log('Connected')

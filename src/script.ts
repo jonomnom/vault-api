@@ -4,6 +4,7 @@ import './data/mongodb'
 import Contract from 'web3-eth-contract'
 import {VAULT_ABI} from './data/vault-abi'
 import {ethers} from 'ethers'
+import 'dotenv/config'
 //@ts-ignore
 const Web3 = require('web3')
 const web3 = new Web3('https://rpc.ankr.com/fantom/')
@@ -34,41 +35,52 @@ async function main () {
             data: []
         })
     }
-    
-    const calcAverage = (data : Array<any>) => {
-      const average = data.reduce((p, c) => ethers.BigNumber.from(c.amount).add(p), ethers.BigNumber.from('0')).div(ethers.BigNumber.from(data.length.toString()))
+    //This function assumes that decimal doesn't matter
+    const bnToFloat = (number: number) => {
+      return parseFloat(ethers.utils.formatUnits(ethers.BigNumber.from(number), 12))
+    }
+    const calcAverage = (data : Array<any>, days: number) => {
+      const firstAmount = bnToFloat(data[0].amount)
+      const lastAmount = bnToFloat(data[data.length - 1].amount)
+      const daysInYear = 365
+      let average = (lastAmount - firstAmount)/firstAmount * daysInYear / days
+
       return average
     }
 
     const apyDateConfig : {
       type: APYS,
-      ms: number
+      ms: number,
+      days: number
     }[] = [
       {
         type: 'apy',
-        ms: YEAR_IN_MS
+        ms: YEAR_IN_MS,
+        days: 365
       },
       {
         type: 'apy1d',
-        ms: SEVEN_DAY_IN_MS
+        ms: ONE_DAY_IN_MS,
+        days: 1
       },
       {
         type: 'apy3d',
-        ms: THREE_DAY_IN_MS
+        ms: THREE_DAY_IN_MS,
+        days: 3
       },
       {
         type: 'apy7d',
-        ms: ONE_DAY_IN_MS
+        ms: SEVEN_DAY_IN_MS,
+        days: 7
       },
     ]
     type APYS = 'apy' | 'apy1d' | 'apy3d' | 'apy7d'
-    const doAverage = (type: APYS, ms : number) => {
+    const doAverage = (type: APYS, ms : number, days: number) => {
       EntryModel.find({
         time:{$gt: Date.now() - ms}
-      }).then(res => {
+      }).sort('time').then(res => {
         //todo - make work with more than one vault
-        const average = calcAverage(res)
-        console.log(average.toString())
+        const average = calcAverage(res, days)
         updateAverage(type, average.toString())
       })
     }
@@ -77,7 +89,9 @@ async function main () {
         {vaultId: ID}, //filter
         {[type]: average}, //update 
         {}, (err) => {
-          console.log(err)
+          if (err) {
+            console.log(err)
+          }
         }
       )
     }
@@ -91,7 +105,7 @@ async function main () {
       amount: totalSupply.toString()
     })
     apyDateConfig.forEach(i => {
-      doAverage(i.type, i.ms)
+      doAverage(i.type, i.ms, i.days)
     })
 
         // EntryModel.find({
@@ -99,7 +113,7 @@ async function main () {
         // }).then(res => console.log(res))
 
         
-    }, 5000)
+    }, process.env.REFRESH_MS && parseInt(process.env.REFRESH_MS) || 5000)
 }
 
 export default main
