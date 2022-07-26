@@ -88,10 +88,11 @@ async function main () {
       VaultModel.findOneAndUpdate(
         {vaultId: ID}, //filter
         {[type]: average}, //update 
-        {}, (err) => {
+        {}, (err, doc, res) => {
           if (err) {
             console.log(err)
           }
+          console.log(res)
         }
       )
     }
