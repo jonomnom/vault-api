@@ -2,7 +2,7 @@
 import * as mongoose from 'mongoose'
 import * as process from 'process'
 import { EventEmitter } from 'stream'
-
+import 'dotenv/config'
 export class MongooseDB extends EventEmitter {
     public static inst?: MongooseDB
     public connected: boolean

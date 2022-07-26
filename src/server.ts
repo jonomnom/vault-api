@@ -4,6 +4,7 @@ import * as bodyParser from 'body-parser'
 import * as cors from 'cors'
 import * as rateLimit from 'express-rate-limit'
 import RouteVault from './routes/vault.routes'
+import script from './script'
 
 const app = express()
 const port = 8080 // default port to listen
@@ -29,6 +30,7 @@ RouteVault(app)
 
 async function startServer () {
     await mongodb
+    script()
     // start the express server
     app.listen(port, () => {
         // tslint:disable-next-line:no-console
