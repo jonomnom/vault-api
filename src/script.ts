@@ -44,7 +44,7 @@ async function main () {
       const lastAmount = bnToFloat(data[data.length - 1].amount)
       const daysInYear = 365
       let average = (lastAmount - firstAmount)/firstAmount * daysInYear / days
-
+      console.log(`(${lastAmount} - ${firstAmount})/${firstAmount} * ... = ${average}`)
       return average
     }
 
@@ -92,7 +92,9 @@ async function main () {
           if (err) {
             console.log(err)
           }
-          console.log(res)
+          if (doc) {
+           //console.log("doc:", doc)
+          }
         }
       )
     }
